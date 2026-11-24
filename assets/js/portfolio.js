@@ -39,12 +39,18 @@
   const heroVideo = $("#hero-video");
 
   if (heroVideo) {
+    const heroSource = heroVideo.querySelector("source");
+    const heroSrc = heroSource?.src;
+    let heroLoaded = Boolean(heroSrc);
+    if (heroSource) heroSource.remove();
+    if (heroSrc) heroVideo.src = heroSrc;
+
     heroVideo.muted = true;
     heroVideo.loop = true;
     heroVideo.setAttribute("playsinline", "");
 
     const playHeroVideo = () => {
-      if (!heroVideo.paused) return;
+      if (!heroLoaded || !heroVideo.paused) return;
       const attempt = heroVideo.play();
       if (attempt?.catch) attempt.catch(() => {});
     };
@@ -68,6 +74,34 @@
     window.setInterval(() => {
       if (!document.hidden) playHeroVideo();
     }, 5000);
+
+    // Release the large hero file once it leaves the viewport, so the lower
+    // sections and project videos get the connection on mobile.
+    const heroSection = $("#top");
+    if (heroSection && heroSrc && "IntersectionObserver" in window) {
+      const unloadHeroVideo = () => {
+        if (!heroLoaded) return;
+        heroLoaded = false;
+        heroVideo.pause();
+        heroVideo.removeAttribute("src");
+        heroVideo.load();
+      };
+      const reloadHeroVideo = () => {
+        if (heroLoaded) return;
+        heroLoaded = true;
+        heroVideo.src = heroSrc;
+        heroVideo.load();
+        playHeroVideo();
+      };
+      const heroObserver = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) reloadHeroVideo();
+          else unloadHeroVideo();
+        },
+        { threshold: 0.01 }
+      );
+      heroObserver.observe(heroSection);
+    }
   }
 
   /* ---------------------------------------------------------------------
