@@ -73,7 +73,11 @@
   /* ---------------------------------------------------------------------
      About background video
      --------------------------------------------------------------------- */
-  const aboutVideos = $$(".about-stage__video");
+  const aboutStage = $(".about-stage:not(.about-stage--evidence)");
+  const aboutVideos = $$(
+    ".about-stage:not(.about-stage--evidence) .about-stage__video"
+  );
+  let aboutActive = false;
 
   aboutVideos.forEach((aboutVideo) => {
     aboutVideo.muted = true;
@@ -81,7 +85,7 @@
     aboutVideo.setAttribute("playsinline", "");
 
     const playAboutVideo = () => {
-      if (!aboutVideo.paused) return;
+      if (!aboutActive || !aboutVideo.paused) return;
       const attempt = aboutVideo.play();
       if (attempt?.catch) attempt.catch(() => {});
     };
@@ -107,8 +111,31 @@
     }, 5000);
   });
 
+  const activateAboutVideo = () => {
+    aboutActive = true;
+    aboutVideos.forEach((aboutVideo) => {
+      aboutVideo.preload = "auto";
+      if (aboutVideo.readyState < 1) aboutVideo.load();
+      const attempt = aboutVideo.play();
+      if (attempt?.catch) attempt.catch(() => {});
+    });
+  };
+
+  if (aboutStage && "IntersectionObserver" in window) {
+    const aboutVideoObserver = new IntersectionObserver(
+      (entries, observer) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        activateAboutVideo();
+        observer.disconnect();
+      },
+      { rootMargin: "200px 0px" }
+    );
+    aboutVideoObserver.observe(aboutStage);
+  } else {
+    activateAboutVideo();
+  }
+
   /* Gentle pointer parallax for the portrait. */
-  const aboutStage = $(".about-stage:not(.about-stage--evidence)");
   const aboutPhotoFloat = $(".about-photo__float");
   if (aboutStage && aboutPhotoFloat) {
     const finePointer = window.matchMedia("(pointer: fine)");
@@ -139,18 +166,12 @@
   const evidenceVideo = $(".about-stage__video--evidence");
   if (evidenceVideo) {
     const warmEvidenceVideo = () => {
-      if (evidenceVideo.readyState < 2) {
-        evidenceVideo.muted = true;
-        evidenceVideo.load();
-      }
+      evidenceVideo.muted = true;
+      evidenceVideo.preload = "auto";
+      if (evidenceVideo.readyState < 1) evidenceVideo.load();
       const attempt = evidenceVideo.play();
       if (attempt?.catch) attempt.catch(() => {});
     };
-
-    window.setTimeout(warmEvidenceVideo, 900);
-    window.addEventListener("load", () => window.setTimeout(warmEvidenceVideo, 250), {
-      once: true,
-    });
 
     const evidenceStage = $(".about-stage--evidence");
     if (evidenceStage && "IntersectionObserver" in window) {
@@ -160,9 +181,11 @@
           warmEvidenceVideo();
           observer.disconnect();
         },
-        { rootMargin: "800px 0px" }
+        { rootMargin: "300px 0px" }
       );
       evidenceObserver.observe(evidenceStage);
+    } else {
+      warmEvidenceVideo();
     }
   }
 
@@ -171,6 +194,7 @@
      Full source duration, muted, looping, no play control.
      --------------------------------------------------------------------- */
   const workBackgroundVideo = $("#work-background-video");
+  let workActive = false;
 
   if (workBackgroundVideo) {
     workBackgroundVideo.muted = true;
@@ -179,7 +203,7 @@
     workBackgroundVideo.setAttribute("playsinline", "");
 
     const playWorkBackgroundVideo = () => {
-      if (!workBackgroundVideo.paused) return;
+      if (!workActive || !workBackgroundVideo.paused) return;
       const attempt = workBackgroundVideo.play();
       if (attempt?.catch) attempt.catch(() => {});
     };
@@ -207,17 +231,26 @@
       if (!document.hidden) playWorkBackgroundVideo();
     }, 4000);
 
+    const activateWorkBackgroundVideo = () => {
+      workActive = true;
+      workBackgroundVideo.preload = "auto";
+      if (workBackgroundVideo.readyState < 1) workBackgroundVideo.load();
+      playWorkBackgroundVideo();
+    };
+
     const videoScope = $(".video-scope");
     if (videoScope && "IntersectionObserver" in window) {
       const workVideoObserver = new IntersectionObserver(
         (entries, observer) => {
           if (!entries.some((entry) => entry.isIntersecting)) return;
-          playWorkBackgroundVideo();
+          activateWorkBackgroundVideo();
           observer.disconnect();
         },
-        { rootMargin: "1000px 0px" }
+        { rootMargin: "600px 0px" }
       );
       workVideoObserver.observe(videoScope);
+    } else {
+      activateWorkBackgroundVideo();
     }
   }
 
@@ -226,6 +259,7 @@
      Full source duration, muted, looping, no play control.
      --------------------------------------------------------------------- */
   const contactBackgroundVideo = $("#contact-background-video");
+  let contactActive = false;
 
   if (contactBackgroundVideo) {
     const useCompactContactVideo = window.matchMedia(
@@ -237,7 +271,6 @@
       ? "assets/video/contact-background-mobile.mp4"
       : "assets/video/contact-background-desktop.mp4";
     contactBackgroundVideo.appendChild(contactVideoSource);
-    contactBackgroundVideo.load();
 
     contactBackgroundVideo.muted = true;
     contactBackgroundVideo.loop = true;
@@ -254,6 +287,7 @@
     applyContactVideoRate();
 
     const playContactBackgroundVideo = () => {
+      if (!contactActive) return;
       applyContactVideoRate();
       if (!contactBackgroundVideo.paused) return;
       const attempt = contactBackgroundVideo.play();
@@ -296,28 +330,31 @@
       if (!document.hidden) playContactBackgroundVideo();
     }, 4000);
 
+    const activateContactVideo = () => {
+      contactActive = true;
+      contactBackgroundVideo.preload = "auto";
+      if (contactBackgroundVideo.readyState < 1) contactBackgroundVideo.load();
+      try {
+        contactBackgroundVideo.currentTime = 0;
+      } catch (_error) {
+        // Metadata may still be loading; playback starts at zero anyway.
+      }
+      playContactBackgroundVideo();
+    };
+
     const contactSection = $("#contact");
     if (contactSection && "IntersectionObserver" in window) {
-      let hasEnteredContact = false;
       const contactVideoObserver = new IntersectionObserver(
         (entries, observer) => {
           if (!entries.some((entry) => entry.isIntersecting)) return;
-          if (!hasEnteredContact) {
-            hasEnteredContact = true;
-            // Start the background from zero the first time the contact area is seen,
-            // so the visitor sees the complete source duration rather than joining mid-loop.
-            try {
-              contactBackgroundVideo.currentTime = 0;
-            } catch (_error) {
-              // Metadata may still be loading; autoplay will handle the first frames.
-            }
-          }
-          playContactBackgroundVideo();
+          activateContactVideo();
           observer.disconnect();
         },
-        { threshold: 0.18 }
+        { rootMargin: "300px 0px", threshold: 0.01 }
       );
       contactVideoObserver.observe(contactSection);
+    } else {
+      activateContactVideo();
     }
   }
 
