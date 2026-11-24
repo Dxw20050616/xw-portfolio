@@ -1,0 +1,110 @@
+HOMEPAGE BACKGROUND VIDEO — NOTES
+================================
+
+Source supplied by the site owner:
+    C:\Users\deng\OneDrive\Desktop\视频素材\11月22日(1).mp4
+
+The source is a 25.2 s, 3840 x 2160, 60 fps colourful forest scene with
+foxes and animated plants. It contains no interface text, HUD, captions,
+watermark or other overlay UI.
+
+The full clip is used as a silent background loop. Resolution and frame rate
+are preserved:
+- audio removed;
+- transcoded from H.264 (source) to a web-compatible H.264 / yuv420p file;
+- 3840 x 2160, 60 fps, High profile, level 5.2, CRF 20;
+- looped by the video element;
+- no downscaling and no text or UI added to the output.
+
+Files:
+    home-loop.mp4          (~43.2 MB, 3840 x 2160 / 60 fps primary)
+    home-loop-1440.mp4     (~20.4 MB, 2560 x 1440 / 60 fps fallback)
+    home-loop-poster.webp  (~211 KB, 1920 x 1080)
+
+The 4K file is used first. If it cannot load / decode, the page switches to
+the 1440p fallback automatically so the background keeps moving. The page
+does not require a play-button click and has no playback control UI.
+
+Rebuild with scripts/build_home_video.py.
+
+PORTFOLIO HERO BACKGROUND VIDEO — NOTES
+=======================================
+
+Source supplied by the site owner:
+    C:\Users\deng\OneDrive\Desktop\视频素材\视频2.mp4
+
+The source is a 3:24, 1280 x 720, 60 fps abstract underwater ring scene.
+It contains no interface text, HUD, captions or watermark.
+
+The full 3:24 clip is used as the portfolio hero background. The H.264 video
+stream is copied without re-encoding, so resolution, frame rate, duration and
+source image quality are preserved exactly; only the audio is removed.
+
+Files:
+    hero-portfolio.mp4          (~45.9 MB, 1280 x 720 / 60 fps, 3:24)
+    hero-portfolio-poster.webp  (1280 x 720)
+
+The video plays the complete 3 min 24 s clip, then loops back to the start.
+
+The hero has no UI screenshots / device mockups. The video loops automatically
+and the page has no play button.
+
+Rebuild with scripts/build_portfolio_hero_video.py.
+
+ABOUT BACKGROUND VIDEO — NOTES
+==============================
+
+Source supplied by the site owner:
+    C:\Users\deng\OneDrive\Desktop\视频素材\视频3.mp4
+
+The source is a 39.8 s, 1280 x 720, 25 fps starfield / nebula animation with
+an AAC audio track. It contains no interface text, HUD, captions or watermark.
+
+The complete 39.8 s clip is used as the About background. The source is HEVC,
+which most non-Safari browsers cannot decode, so it is converted in place to
+web-compatible H.264:
+- audio removed;
+- native 1280 x 720 resolution and 25 fps preserved (no scaling, no frame-rate
+  change, no trimming);
+- High profile, level 4.0, CRF 16 (visually lossless for this source);
+- faststart for progressive loading;
+- looped by the video element and started muted / autoplay.
+
+Files:
+    about-background.mp4          (~11.7 MB, 1280 x 720 / 25 fps, 39.8 s)
+    about-background-poster.webp  (1280 x 720)
+
+The page has no play button. The video autoplays muted, loops, and plays the
+complete 39.8 s clip before repeating. Rebuild with
+scripts/build_about_video.py.
+
+
+
+WORK SECTION BACKGROUND VIDEO — NOTES
+=====================================
+
+Source supplied by the site owner:
+    C:\Users\deng\OneDrive\Desktop\网站参考素材\视频 4.mp4
+
+The source is a 17.79 s, 1280 x 720, 60 fps dark space / asteroid scene with
+an AAC audio track. It contains no text, captions, HUD or watermark.
+
+The complete 17.79 s clip is used as the work-archive background. The source
+is HEVC, so it is converted to web-compatible H.264:
+- audio removed;
+- native 1280 x 720 resolution and 60 fps preserved (no scaling, no frame-rate
+  change, no trimming);
+- High profile, level 4.2, CRF 15 (visually transparent for this source);
+- faststart for progressive loading;
+- muted autoplay + loop; full 17.79 s duration before repeating.
+
+Files:
+    work-background.mp4          (~9.5 MB, 1280 x 720 / 60 fps, 17.78 s)
+    work-background-poster.webp  (1280 x 720, 4 s frame)
+
+The video is a sticky viewport-height background shared by the complete work
+archive and the approach / method section. One `.video-scope` wrapper contains
+one video layer for both sections, so the background continues without reload
+or phase change when scrolling from work into approach. It has no controls and
+no play button. A slow 34 s CSS drift adds subtle extra movement; the video
+itself always plays. Rebuild with scripts/build_work_video.py.

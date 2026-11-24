@@ -1,0 +1,142 @@
+/* ==========================================================================
+   iOS / SAFE-AREA POLISH
+   Keeps the existing visual system; only adjusts viewport and input edges.
+   ========================================================================== */
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+@supports (padding: max(0px)) {
+  .site-header {
+    padding-top: max(22px, calc(env(safe-area-inset-top) + 12px));
+    padding-right: env(safe-area-inset-right);
+    padding-left: env(safe-area-inset-left);
+  }
+
+  .site-header.is-scrolled {
+    padding-top: max(14px, calc(env(safe-area-inset-top) + 8px));
+  }
+
+  .site-menu {
+    padding-right: env(safe-area-inset-right);
+    padding-left: env(safe-area-inset-left);
+  }
+
+  .work-toc {
+    top: calc(env(safe-area-inset-top) + 62px);
+  }
+
+  .site-menu__top {
+    padding-top: max(25px, calc(env(safe-area-inset-top) + 16px));
+  }
+
+  .site-menu__bottom {
+    padding-bottom: max(24px, calc(env(safe-area-inset-bottom) + 18px));
+  }
+
+  .entry-shell {
+    padding-right: max(var(--gutter), calc(env(safe-area-inset-right) + 16px));
+    padding-left: max(var(--gutter), calc(env(safe-area-inset-left) + 16px));
+  }
+
+  .about-stage > .container {
+    padding-right: max(0px, calc(env(safe-area-inset-right) - var(--gutter)));
+    padding-left: max(0px, calc(env(safe-area-inset-left) - var(--gutter)));
+  }
+
+  .entry-header {
+    padding-top: max(clamp(17px, 2.5vh, 28px), calc(env(safe-area-inset-top) + 14px));
+  }
+
+  .entry-footer {
+    padding-bottom: max(clamp(10px, 1.8vh, 17px), calc(env(safe-area-inset-bottom) + 10px));
+  }
+
+  .contact-toast {
+    right: max(clamp(16px, 2.6vw, 36px), calc(env(safe-area-inset-right) + 12px));
+    bottom: max(clamp(16px, 2.6vw, 34px), calc(env(safe-area-inset-bottom) + 12px));
+  }
+
+  #about,
+  #work,
+  #approach,
+  #contact,
+  #software-copyrights {
+    scroll-margin-top: max(
+      clamp(80px, 9vh, 96px),
+      calc(env(safe-area-inset-top) + 88px)
+    );
+  }
+
+  .work-chapter {
+    scroll-margin-top: max(150px, calc(env(safe-area-inset-top) + 140px));
+  }
+}
+
+@media (max-width: 900px), (pointer: coarse) {
+  .work-toc {
+    top: calc(env(safe-area-inset-top) + 83px);
+  }
+
+  .work-chapter {
+    scroll-margin-top: max(150px, calc(env(safe-area-inset-top) + 140px));
+  }
+
+  .video-dialog__bar,
+  .gallery-dialog__bar {
+    padding-top: max(16px, calc(env(safe-area-inset-top) + 10px));
+    padding-right: max(var(--gutter), calc(env(safe-area-inset-right) + 12px));
+    padding-left: max(var(--gutter), calc(env(safe-area-inset-left) + 12px));
+  }
+
+  .case-dialog__bar {
+    padding-top: max(17px, calc(env(safe-area-inset-top) + 10px));
+    padding-right: max(var(--gutter), calc(env(safe-area-inset-right) + 12px));
+    padding-left: max(var(--gutter), calc(env(safe-area-inset-left) + 12px));
+  }
+}
+
+@media (max-width: 820px) {
+  .contact-field input,
+  .contact-field textarea {
+    font-size: 16px;
+  }
+}
+
+@media (pointer: coarse) {
+  .contact-copy-button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .site-menu__close,
+  .gallery-dialog__close,
+  .video-dialog__close {
+    min-height: 44px;
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  html,
+  body {
+    min-height: 100%;
+  }
+
+  .site-loader__brand {
+    top: max(clamp(42px, 9vh, 72px), calc(env(safe-area-inset-top) + 18px));
+  }
+
+  .site-loader__bottom {
+    bottom: max(clamp(26px, 5vh, 46px), calc(env(safe-area-inset-bottom) + 14px));
+  }
+
+  .contact-toast {
+    bottom: max(16px, calc(env(safe-area-inset-bottom) + 12px));
+  }
+}

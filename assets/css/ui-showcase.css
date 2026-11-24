@@ -1,0 +1,262 @@
+/* ==========================================================================
+   UI SHOWCASE / PHONE MOCKUP + SIDE FAN
+   Centered black full-screen phone; portrait works fan out in arcs.
+   ========================================================================== */
+
+.ui-showcase {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  overflow: clip;
+}
+
+.ui-showcase__hint {
+  margin-bottom: 0;
+}
+
+.circular-gallery__hint--ui {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: fit-content;
+  max-width: calc(100% - 24px);
+  margin: clamp(26px, 3.2vw, 40px) auto 0;
+  padding: 8px 15px;
+  border: 1px solid rgba(158, 223, 201, 0.2);
+  border-radius: 999px;
+  background: rgba(7, 12, 11, 0.42);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+  color: #d9ece5;
+  font-size: clamp(13px, 1.05vw, 15px);
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.circular-gallery__hint--ui::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #9edfc9;
+  box-shadow: 0 0 10px rgba(158, 223, 201, 0.55);
+}
+
+.ui-showcase__stage {
+  position: relative;
+  width: 100%;
+  height: clamp(520px, 52vw, 770px);
+  min-height: 520px;
+  overflow: clip;
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.ui-showcase__stage.is-dragging {
+  cursor: grabbing;
+}
+
+.ui-fan {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.ui-fan__card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 180px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  cursor: grab;
+  transform: translate(-50%, -50%);
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ui-fan__card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  filter: none;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.ui-showcase__stage.is-dragging .ui-fan__card {
+  cursor: grabbing;
+}
+
+.ui-phone {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 200;
+  width: clamp(190px, 22.9vw, 330px);
+  aspect-ratio: 310 / 650;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 32px 42px rgba(0, 0, 0, 0.52));
+  cursor: pointer;
+}
+
+.ui-phone__frame {
+  position: absolute;
+  inset: 0;
+  border-radius: clamp(30px, 3.35vw, 48px);
+  padding: clamp(5px, 0.55vw, 8px);
+  background:
+    linear-gradient(128deg, #eef0f2 0%, #a9adb2 4%, #43484f 11%, #0b0d10 22%, #050609 55%, #13171c 82%, #7b8088 96%, #dfe2e6 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.26),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.3),
+    inset 0 0 22px rgba(255, 255, 255, 0.1);
+}
+
+.ui-phone__frame::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.34), transparent 18%, transparent 76%, rgba(255, 255, 255, 0.2)),
+    conic-gradient(from 210deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.05));
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.ui-phone__screen {
+  position: absolute;
+  inset: clamp(7px, 0.72vw, 10px);
+  z-index: 2;
+  overflow: hidden;
+  border-radius: clamp(24px, 2.85vw, 40px);
+  background: #000;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.9);
+}
+
+.ui-phone__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 1;
+  transition: opacity 180ms ease;
+}
+
+.ui-phone__image.is-changing {
+  opacity: 0.2;
+}
+
+.ui-phone__island {
+  position: absolute;
+  top: clamp(11px, 1.2vw, 18px);
+  left: 50%;
+  z-index: 4;
+  width: 33%;
+  height: clamp(14px, 1.8vw, 23px);
+  border-radius: 999px;
+  background: #000;
+  transform: translateX(-50%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 2px 7px rgba(0, 0, 0, 0.42);
+}
+
+.ui-phone__island::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 22%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #6474ff, #07104d 70%);
+  transform: translateY(-50%);
+}
+
+.ui-phone__glare {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  background:
+    linear-gradient(116deg, rgba(255, 255, 255, 0.18) 0%, transparent 16%, transparent 66%, rgba(255, 255, 255, 0.06) 76%, transparent 88%),
+    radial-gradient(120% 55% at 8% 4%, rgba(255, 255, 255, 0.18), transparent 60%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.ui-phone__button {
+  position: absolute;
+  width: clamp(2px, 0.22vw, 3px);
+  border-radius: 3px;
+  background: linear-gradient(180deg, #aeb2b7, #4c5157 35%, #1b1f23 75%, #737980);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.ui-phone__button--mute {
+  left: -2px;
+  top: 18%;
+  height: 5.2%;
+}
+
+.ui-phone__button--volume {
+  left: -2px;
+  top: 27%;
+  height: 9.2%;
+}
+
+.ui-phone__button--power {
+  right: -2px;
+  top: 29%;
+  height: 11%;
+}
+
+.ui-showcase__stage.is-dragging .ui-phone {
+  cursor: grabbing;
+}
+
+@media (max-width: 900px) {
+  .ui-showcase__stage {
+    height: clamp(520px, 72vw, 650px);
+  }
+}
+
+@media (max-width: 560px) {
+  .ui-showcase {
+    margin-top: 4px;
+  }
+
+  .circular-gallery__hint--ui {
+    gap: 7px;
+    margin-top: 22px;
+    padding: 7px 12px;
+    font-size: 14px;
+    letter-spacing: 0.03em;
+  }
+
+  .ui-showcase__stage {
+    height: 500px;
+    min-height: 500px;
+  }
+
+  .ui-phone {
+    width: 184px;
+  }
+}

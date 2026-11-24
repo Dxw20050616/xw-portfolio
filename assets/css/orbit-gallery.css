@@ -1,0 +1,175 @@
+/* ==========================================================================
+   ORBIT IMAGES / CLASSROOM
+   A flat, slowly revolving ellipse of square image tiles.
+   Adapted from the interaction pattern of React Bits' Orbit Images.
+   ========================================================================== */
+
+.circular-gallery__hint--orbit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: fit-content;
+  max-width: calc(100% - 24px);
+  margin: clamp(26px, 3.2vw, 40px) auto 0;
+  padding: 8px 15px;
+  border: 1px solid rgba(158, 223, 201, 0.2);
+  border-radius: 999px;
+  background: rgba(7, 12, 11, 0.42);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+  color: #d9ece5;
+  font-size: clamp(13px, 1.05vw, 15px);
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.circular-gallery__hint--orbit::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #9edfc9;
+  box-shadow: 0 0 10px rgba(158, 223, 201, 0.55);
+}
+
+.circular-gallery--orbit {
+  position: relative;
+  width: min(1220px, 100%);
+  height: clamp(380px, 32vw, 480px);
+  min-height: 380px;
+  max-height: 480px;
+  margin: clamp(12px, 1.6vw, 20px) auto 0;
+  overflow: clip;
+  isolation: isolate;
+  touch-action: pan-y;
+  user-select: none;
+  cursor: grab;
+  background: transparent;
+}
+
+.circular-gallery--orbit.is-dragging {
+  cursor: grabbing;
+}
+
+.circular-gallery--orbit .circular-gallery__viewport {
+  position: absolute;
+  inset: 0;
+}
+
+.circular-gallery__orbit-path {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 0;
+  width: 1px;
+  height: 1px;
+  border: 1px solid rgba(197, 229, 223, 0.16);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotate(-8deg);
+  transform-origin: 50% 50%;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity 500ms ease,
+    border-color 500ms ease;
+}
+
+.circular-gallery--orbit.is-active .circular-gallery__orbit-path {
+  opacity: 1;
+  border-color: rgba(197, 229, 223, 0.22);
+}
+
+.circular-gallery--orbit .circular-gallery__item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 72px;
+  height: 72px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  background: #0a0e0d;
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.36),
+    0 2px 8px rgba(0, 0, 0, 0.24);
+  opacity: 0;
+  transform: translate3d(0, 0, 0) scale(0.85);
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+  cursor: pointer;
+  -webkit-user-drag: none;
+}
+
+.circular-gallery--orbit .circular-gallery__item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  border: 0;
+  border-radius: 0;
+  object-fit: cover;
+  object-position: 50% 50%;
+  box-shadow: none;
+  transition: transform 500ms cubic-bezier(0.2, 0.72, 0.18, 1);
+  -webkit-user-drag: none;
+}
+
+.circular-gallery--orbit .circular-gallery__item:hover img,
+.circular-gallery--orbit .circular-gallery__item:focus-visible img {
+  transform: scale(1.06);
+}
+
+.circular-gallery--orbit .circular-gallery__item:focus-visible {
+  outline: 2px solid rgba(221, 255, 241, 0.85);
+  outline-offset: 3px;
+}
+
+.circular-gallery--orbit.is-active .circular-gallery__item {
+  opacity: 1;
+  transition: opacity 650ms ease;
+}
+
+@media (max-width: 900px) {
+  .circular-gallery--orbit {
+    height: clamp(360px, 50vw, 440px);
+    min-height: 360px;
+  }
+}
+
+@media (max-width: 560px) {
+  .circular-gallery__hint--orbit {
+    gap: 7px;
+    margin-top: 22px;
+    padding: 7px 12px;
+    font-size: 14px;
+    letter-spacing: 0.03em;
+  }
+
+  .circular-gallery--orbit {
+    width: 100%;
+    height: 370px;
+    min-height: 370px;
+    margin-top: 16px;
+  }
+
+  .circular-gallery__orbit-path {
+    border-color: rgba(197, 229, 223, 0.13);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .circular-gallery--orbit {
+    cursor: default;
+  }
+
+  .circular-gallery--orbit .circular-gallery__item,
+  .circular-gallery--orbit .circular-gallery__item img {
+    transition: none;
+  }
+}

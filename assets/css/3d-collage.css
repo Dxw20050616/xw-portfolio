@@ -1,0 +1,148 @@
+/* ==========================================================================
+   3D CLASS STUDIES 閳?CIRCULAR GALLERY
+   A horizontal ring of images viewed from the front. All image centres share
+   one horizontal line. The front image is largest; back images are smaller
+   and occluded. No borders, text or shadows.
+   ========================================================================== */
+
+.circular-gallery__hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: clamp(20px, 3vw, 36px) 0 0;
+  color: var(--muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.circular-gallery__hint-touch {
+  display: none;
+}
+
+.circular-gallery {
+  position: relative;
+  width: 100vw;
+  height: calc(100svh - 160px);
+  min-height: 520px;
+  max-height: 900px;
+  margin: clamp(10px, 1.6vw, 18px) 0 0 calc(50% - 50vw);
+  overflow: hidden;
+  overflow: clip;
+  isolation: isolate;
+  touch-action: pan-y;
+  user-select: none;
+  cursor: grab;
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(169, 228, 210, 0.04), transparent 46%);
+}
+
+.circular-gallery.is-dragging {
+  cursor: grabbing;
+}
+
+.circular-gallery__viewport {
+  position: absolute;
+  inset: 0;
+}
+
+/* Every image shares the same y centre; the ring is built purely from x,
+   depth scale and z-index. No perspective rotation, no shadows. */
+.circular-gallery__item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(100px, 20.21vw, 400px);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.02);
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+  cursor: grab;
+  -webkit-user-drag: none;
+  pointer-events: auto;
+}
+
+.circular-gallery__item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 0;
+  border-radius: 10px;
+  box-shadow: none;
+  filter: none;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+/* UI project: 16:9 coordinate canvas, 25 original screenshots, no rounded outer frame. */
+.circular-gallery--ui {
+  height: calc(100vw * 9 / 16);
+  min-height: 0;
+  max-height: none;
+}
+
+.circular-gallery--ui .circular-gallery__item {
+  width: auto;
+}
+
+.circular-gallery--ui .circular-gallery__item img {
+  border-radius: 0;
+}
+
+.circular-gallery__item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.gallery-dialog__caption-detail {
+  display: block;
+  max-width: min(56ch, 100%);
+  margin-top: 6px;
+  color: var(--muted-soft);
+  font-size: 0.62rem;
+  line-height: 1.65;
+}
+
+@media (max-width: 900px) {
+  .circular-gallery {
+    height: calc(100svh - 150px);
+    min-height: 440px;
+  }
+
+  .circular-gallery--ui {
+    height: calc(100vw * 9 / 16);
+    min-height: 0;
+  }
+
+  .circular-gallery__hint-desktop {
+    display: none;
+  }
+
+  .circular-gallery__hint-touch {
+    display: inline;
+  }
+}
+
+@media (max-width: 560px) {
+  .circular-gallery {
+    height: 560px;
+    min-height: 0;
+    margin-top: 24px;
+  }
+
+  .circular-gallery--ui {
+    height: calc(100vw * 9 / 16);
+  }
+
+  .circular-gallery__item {
+    width: clamp(76px, 23vw, 150px);
+  }
+}
+
+
+
